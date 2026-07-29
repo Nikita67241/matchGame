@@ -19,3 +19,25 @@ const words =[
 function shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
 }
+function generateJumbledPairs() {
+    //pick 5 correct pairs
+    const selected = shuffle([words]).slice(0, 5);
+
+    // extract english words and shuffle them
+    const jumbledEnglish = shuffle(selected.map(w => w.en));
+
+
+    //clear the UL
+    const list = document.getElementById("wordList");
+    list.innerHTML=""; 
+
+    //create li elements
+    selected.forEach((pair, i) => {
+        const li = document.createElement("li");
+        li.textContent = `${pair.es} -> ${jumbledEnglish[i]}`;
+        list.appendChild(li);
+        });
+}
+document.getElementById("generateButton").addEventListener("click", generateJumbledPairs);
+
+generateJumbledPairs();
