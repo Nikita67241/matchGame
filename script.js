@@ -20,72 +20,72 @@ function shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
 }
 
-let selectedSpanish = null;
+let selectedSpanish = null; // store both the word and its button
 
 function generateJumbledPairs() {
-    // pick 5 correct pairs
     const selected = shuffle([...words]).slice(0, 5);
-
-    // extract english words and shuffle them
     const jumbledEnglish = shuffle(selected.map(w => w.en));
 
-    // clear the UL
     const list = document.getElementById("wordList");
     list.innerHTML = "";
 
-    // create li elements
     selected.forEach((pair, i) => {
-        
         const esBtn = document.createElement("button");
-        esBtn.textContent =  pair.es;
+        esBtn.textContent = pair.es;
         esBtn.classList.add("spanish-button");
-        //when esbtn clicked
-         esBtn.addEventListener("click", () => {
-            selectedSpanish = pair;  // store the whole pair
-            esBtn.style.backgroundColor = "lightblue"; // highlight
+
+        // store both the pair and the button
+        esBtn.addEventListener("click", () => {
+            selectedSpanish = { pair, button: esBtn };
+            esBtn.style.backgroundColor = "lightblue";
         });
 
         const enBtn = document.createElement("button");
-        enBtn.textContent =  jumbledEnglish[i];
+        enBtn.textContent = jumbledEnglish[i];
         enBtn.classList.add("english-button");
-      
-        // When English is clicked
-        enBtn.addEventListener("click", () => {
-            if (!selectedSpanish) return; // no Spanish selected yet
 
-            const correctEnglish = selectedSpanish.en;
+        enBtn.addEventListener("click", () => {
+            if (!selectedSpanish) return;
+
+            const correctEnglish = selectedSpanish.pair.en;
             const clickedEnglish = enBtn.textContent;
 
             if (correctEnglish === clickedEnglish) {
-                // correct match
+                // correct match → mark and remove the right Spanish + English buttons
+                selectedSpanish.button.style.backgroundColor = "lightgreen";
                 enBtn.style.backgroundColor = "lightgreen";
-                esBtn.style.backgroundColor = "lightgreen";
-                alert("Correct match!");
 
-                // remove both buttons
-                esBtn.disabled = true;
-                enBtn.disabled = true;
+                setTimeout(() => {
+                    selectedSpanish.button.remove();
+                    enBtn.remove();
+                }, 500); // small delay for visual feedback
             } else {
-                // wrong match
-                enBtn.style.backgroundColor = "pink";
-                alert("Wrong match!");
+               // incorrect match → mark both buttons red for 5 seconds
+                selectedSpanish.button.style.backgroundColor = "#FF8FA3 ";
+                enBtn.style.backgroundColor = "#FF8FA3 ";
+                const wrongSpanishBtn = selectedSpanish.button;
+                const wrongEnglishBtn = enBtn;
+                
+                setTimeout(() => {
+              wrongSpanishBtn.style.backgroundColor = "pink";
+              wrongEnglishBtn.style.backgroundColor = "pink";
+              }, 300); 
+                setTimeout(() => {
+                wrongSpanishBtn.style.backgroundColor = "";
+                wrongEnglishBtn.style.backgroundColor = "";
+                }, 600); 
             }
 
-            // reset selection
             selectedSpanish = null;
         });
 
-        //adding both buttons to list item
         const li = document.createElement("li");
-        li.appendChild(esBtn);  
+        li.appendChild(esBtn);
         li.appendChild(enBtn);
-       
         list.appendChild(li);
     });
-    
-    // add event listeners to buttons and check for matches
-    
 }
+
 
 
 
