@@ -20,6 +20,8 @@ function shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
 }
 
+let selectedSpanish = null;
+
 function generateJumbledPairs() {
     // pick 5 correct pairs
     const selected = shuffle([...words]).slice(0, 5);
@@ -34,13 +36,44 @@ function generateJumbledPairs() {
     // create li elements
     selected.forEach((pair, i) => {
         
+        const esBtn = document.createElement("button");
+        esBtn.textContent =  pair.es;
+        esBtn.classList.add("spanish-button");
+        //when esbtn clicked
+         esBtn.addEventListener("click", () => {
+            selectedSpanish = pair;  // store the whole pair
+            esBtn.style.backgroundColor = "lightblue"; // highlight
+        });
+
         const enBtn = document.createElement("button");
         enBtn.textContent =  jumbledEnglish[i];
         enBtn.classList.add("english-button");
       
-        const esBtn = document.createElement("button");
-        esBtn.textContent =  pair.es;
-        esBtn.classList.add("spanish-button");
+        // When English is clicked
+        enBtn.addEventListener("click", () => {
+            if (!selectedSpanish) return; // no Spanish selected yet
+
+            const correctEnglish = selectedSpanish.en;
+            const clickedEnglish = enBtn.textContent;
+
+            if (correctEnglish === clickedEnglish) {
+                // correct match
+                enBtn.style.backgroundColor = "lightgreen";
+                esBtn.style.backgroundColor = "lightgreen";
+                alert("Correct match!");
+
+                // remove both buttons
+                esBtn.disabled = true;
+                enBtn.disabled = true;
+            } else {
+                // wrong match
+                enBtn.style.backgroundColor = "pink";
+                alert("Wrong match!");
+            }
+
+            // reset selection
+            selectedSpanish = null;
+        });
 
         //adding both buttons to list item
         const li = document.createElement("li");
@@ -49,7 +82,12 @@ function generateJumbledPairs() {
        
         list.appendChild(li);
     });
+    
+    // add event listeners to buttons and check for matches
+    
 }
+
+
 
 document.getElementById("generateButton").addEventListener("click", generateJumbledPairs);
 
