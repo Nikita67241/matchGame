@@ -21,8 +21,26 @@ function shuffle(array) {
 }
 
 let selectedSpanish = null; // store both the word and its button
+let time = 0;
+let timerInterval = null;
+let matches = 0; // count correct matches
+
 
 function generateJumbledPairs() {
+    // reset timer
+    time = 0;
+    matches = 0;
+    document.getElementById("timer").textContent = "Time: 0s";
+
+    // stop old timer if running
+    if (timerInterval) clearInterval(timerInterval);
+
+    // start new timer
+    timerInterval = setInterval(() => {
+        time++;
+        document.getElementById("timer").textContent = `Time: ${time}s`;
+    }, 1000);
+
     const selected = shuffle([...words]).slice(0, 5);
     const jumbledEnglish = shuffle(selected.map(w => w.en));
 
@@ -55,10 +73,19 @@ function generateJumbledPairs() {
                 selectedSpanish.button.style.backgroundColor = "lightgreen";
                 enBtn.style.backgroundColor = "lightgreen";
 
-                setTimeout(() => {
-                    selectedSpanish.button.remove();
-                    enBtn.remove();
-                }, 500); // small delay for visual feedback
+                selectedSpanish.button.disabled = true;
+                enBtn.disabled = true;
+
+                matches++;
+
+                 if (matches === 5) {
+                    clearInterval(timerInterval);
+
+                    // delay the alert so the green color appears first
+                    setTimeout(() => {
+                        alert(`You finished in ${time} seconds!`);
+                    }, 300); // 0.3 seconds is enough
+                }
             } else {
                // incorrect match → mark both buttons red for 5 seconds
                 selectedSpanish.button.style.backgroundColor = "#FF8FA3 ";
@@ -78,7 +105,7 @@ function generateJumbledPairs() {
 
             selectedSpanish = null;
         });
-
+        
         const li = document.createElement("li");
         li.appendChild(esBtn);
         li.appendChild(enBtn);
