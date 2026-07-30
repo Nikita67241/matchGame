@@ -33,9 +33,19 @@ function generateJumbledPairs() {
 
     // create li elements
     selected.forEach((pair, i) => {
+        
+        const enBtn = document.createElement("button");
+        enBtn.textContent =  jumbledEnglish[i];
+        enBtn.classList.appendChild("english-button");
+      
+        const esBtn = document.createElement("button");
+        esBtn.textContent =  pair.es;
+        esBtn.classList.appendChild("spanish-button");
+
+        //adding both buttons to list item
         const li = document.createElement("li");
-        li.textContent = `${pair.es} -> ${jumbledEnglish[i]}`;
-        list.appendChild(li);
+        li.appendChild(esBtn);
+        li.appendChild(enBtn);
     });
 }
 
