@@ -15,3 +15,26 @@ body{
   height: 40px;
   align-self: center;
 }
+#wordList{
+  display: flex;
+  flex-direction: column;
+  
+  max-width: 360px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  
+}
+#wordList li{
+  display: flex;
+  justify-content: space-evenly;
+  list-style-type: none;
+  margin-bottom: 10px;
+}
+#wordList li button{
+  width: 150px;
+  height: 40px;
+  font-size: 20px;
+  font-weight: semibold;
+  
+}
