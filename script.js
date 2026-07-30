@@ -36,19 +36,20 @@ function generateJumbledPairs() {
         
         const enBtn = document.createElement("button");
         enBtn.textContent =  jumbledEnglish[i];
-        enBtn.classList.appendChild("english-button");
+        enBtn.classList.add("english-button");
       
         const esBtn = document.createElement("button");
         esBtn.textContent =  pair.es;
-        esBtn.classList.appendChild("spanish-button");
+        esBtn.classList.add("spanish-button");
 
         //adding both buttons to list item
         const li = document.createElement("li");
-        li.appendChild(esBtn);
+        li.appendChild(esBtn);  
         li.appendChild(enBtn);
+       
+        list.appendChild(li);
     });
 }
 
 document.getElementById("generateButton").addEventListener("click", generateJumbledPairs);
 
-generateJumbledPairs();
